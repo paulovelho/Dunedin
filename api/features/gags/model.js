@@ -47,7 +47,7 @@ sch.pre("save", function (next) {
 
   bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
     if (err) return next(err);
-    bcrypt.hash(this.content, salt, null, (err, hash) => {
+    bcrypt.hash(this.content+this.author, salt, null, (err, hash) => {
       if (err) return next(err);
       this.hash = hash;
       next(null, this);
