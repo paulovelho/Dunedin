@@ -14,6 +14,10 @@ class GagsController extends BaseApi {
     this.gagLimit = 10;
   }
 
+  cleanQuery(q) {
+    if(!q) return null;
+    return q.replace(/ *\([^)]*\) */g, "");
+  }
   getPage(req) {
     let page = req.query.page;
     if(!page) page = 0;
@@ -47,11 +51,11 @@ class GagsController extends BaseApi {
   searchGags(req, res) {
     var query = {};
     
-    var q = req.query.q;
+    var q = this.cleanQuery(req.query.q);
     if(q) query["content"] = { "$regex": q, "$options": "i" };
     var origin = req.query.origin;
     if(origin) query["origin"] = { "$regex": origin, "$options": "i" };
-    var author = req.query.author;
+    var author = this.cleanQuery(req.query.author);
     if(author) query["author"] = { "$regex": author, "$options": "i" };
 
     this.returnGagsWithQuery(
