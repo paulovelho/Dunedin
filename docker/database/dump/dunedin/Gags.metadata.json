@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"dunedin.Gags"},{"v":{"$numberInt":"2"},"unique":true,"key":{"hash":{"$numberInt":"1"}},"name":"hash_1","ns":"dunedin.Gags","background":true}],"uuid":"9428911ee93546eda9d70920667d1831"}
