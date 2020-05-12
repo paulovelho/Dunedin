@@ -38,5 +38,5 @@ db.Gags.drop()
 
 #### dump:
 go to `/application`
-execute: `mongodump --db dunedin` to create
-execute: `mongorestore dump` to restore
+execute: `mongodump --db dunedin --gzip --archive=dunedin.archive` to backup
+execute: `mongorestore --gzip --archive=dunedin.archive` to restore
