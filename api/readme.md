@@ -36,3 +36,7 @@ show tables
 db.Gags.drop()
 ```
 
+#### dump:
+go to `/application`
+execute: `mongodump --db dunedin` to create
+execute: `mongorestore dump` to restore
