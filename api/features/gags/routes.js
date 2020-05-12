@@ -3,7 +3,7 @@
 module.exports = (app) => {
 	var controller = require('./controller');
 
-  let auth = controller.isAuthenticated.bind(controller);
+	let auth = controller.isAuthenticated.bind(controller);
 
 	app.route('/gags')
 		.get(auth, controller.getGags.bind(controller))

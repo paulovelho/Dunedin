@@ -3,7 +3,9 @@ version: '3.7'
 services:
   dunedin_mongodb:
     container_name: "dunedin-mongo"
-    image: mongo:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-mongo
     env_file: docker/.env
     environment:
       MONGO_INITDB_ROOT_USERNAME: $MONGO_USERNAME
@@ -15,12 +17,13 @@ services:
 
   dunedin_api:
     container_name: "dunedin-api"
-    image: nodejs
+    hostname: dunedin.localhost.com
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-api
     env_file: docker/.env
     ports:
-      - "80:8080"
+      - "3000:3000"
     volumes:
-      - api:/home/node/api
-      - api/node_modules:/home/node/api/node_modules
-
-
+      - ./api:/home/node/api
+      - ./api/node_modules:/home/node/api/node_modules

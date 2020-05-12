@@ -19,6 +19,16 @@ class BaseApi {
     });
   }
 
+  success_paginate(res, page, more, data) {
+    if(!res) return;
+    return res.status(200).send({
+      success: true,
+      page: page,
+      has_more: more,
+      data: data
+    });
+  }
+
   fail(res, code, message, data) {
     return res.status(200).send({
       success: false,

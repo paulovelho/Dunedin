@@ -8,16 +8,22 @@ const path = require('path');
 const jsonStream = StreamArray.withParser();
 
 
-var gag = require("../features/gags/model");
+var Gag = require("../features/gags/model");
 
-console.info(gag);
+// let filename = path.join(__dirname, 'docs', 'twitter.js'); // sample file
+let filename = path.join(__dirname, 'docs', 'twitter', 'tweet.js');
 
 
-let filename = path.join(__dirname, 'docs', 'twitter.js');
-//let filename = path.join(__dirname, 'docs', 'twitter', 'tweet.js');
+function connect() {
+	var connect = require("../services/connect");
 
-var parseTweet = (tw) => {
-//	console.info("parsing ", tw);
+	return new Promise((resolve, reject) => {
+		connect(null, null, () => { console.info("connected"); resolve(); });
+	});
+}
+
+
+var parseTweet = async (tw) => {
 	let content = tw.full_text;
 	let author = "paulovelho";
 	let rtRegex = /RT @[^\s]+: /;
@@ -36,7 +42,14 @@ var parseTweet = (tw) => {
 		author: '@'+author,
 		location: "http://twitter.com/"+author+"/status/"+tw.id,
 	}
-	console.info(gag);
+	let g = new Gag(gag);
+	try {
+		let model = await g.save();
+		log.info("saved ", model);
+		return model;
+	} catch(err) {
+		log.error(err);
+	}
 }
 
 jsonStream.on('data', ({key, value}) => {
@@ -47,7 +60,13 @@ jsonStream.on('end', () => {
 	console.log('All done');
 });
 
-var s = fs.createReadStream(filename)
-	.pipe(jsonStream.input);
+function importer() {
+	var s = fs.createReadStream(filename)
+		.pipe(jsonStream.input);
+}
 
 
+(async () => {
+	await connect();
+	importer();
+})();

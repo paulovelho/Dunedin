@@ -9,6 +9,63 @@ var mocks = require('../../test-helpers/_mocks');
 
 class GagsController extends BaseApi {
 
+  constructor() {
+    super();
+    this.gagLimit = 10;
+  }
+
+  getPage(req) {
+    let page = req.query.page;
+    if(!page) page = 0;
+    return page;
+  }
+  paginate(req) {
+    let page = this.getPage(req);
+    return page * this.gagLimit;
+  }
+  returnGagsWithQuery(query, req, res) {
+    let limit = this.gagLimit+1;
+    log.info("search query: ", query);
+
+    return Gag.find(query)
+      .limit(limit)
+      .skip(this.paginate(req))
+      .then(data => {
+        let has_more = (data.length == limit);
+        let page = this.getPage(req);
+        if(has_more) data.pop();
+        this.success_paginate(res, page, has_more, data);
+      })
+      .catch(err => this.exception(res, err));
+
+  }
+
+  getGags(req, res) {
+    this.returnGagsWithQuery(null, req, res);
+  }
+
+  searchGags(req, res) {
+    var query = {};
+    
+    var q = req.query.q;
+    if(q) query["content"] = { "$regex": q, "$options": "i" };
+    var origin = req.query.origin;
+    if(origin) query["origin"] = { "$regex": origin, "$options": "i" };
+    var author = req.query.author;
+    if(author) query["author"] = { "$regex": author, "$options": "i" };
+
+    this.returnGagsWithQuery(
+      query,
+      req, res);
+  }
+
+  searchAuthors(req, res) {
+    var query = req.query.q;
+    this.returnGagsWithQuery(
+      { "author": { "$regex": query, "$options": "i" } },
+      req, res);
+  }
+
   getGag(req, res) {
     let id = req.params.id;
     Gag.findById(id)
@@ -16,29 +73,7 @@ class GagsController extends BaseApi {
       .catch(err => this.exception(res, err));
   }
 
-  getGags(req, res) {
-    Gag.find()
-      .limit(50)
-      .then(model => this.success(res, model))
-      .catch(err => this.exception(res, err));
-  }
-
-  searchGags(req, res) {
-    var query = req.query.q;
-    Gag.find({ "content": { "$regex": query, "$options": "i" } })
-      .then(model => this.success(res, model))
-      .catch(err => this.exception(res, err));
-  }
-
-  searchAuthors(req, res) {
-    var query = req.query.q;
-    Gag.find({ "author": { "$regex": query, "$options": "i" } })
-      .then(model => this.success(res, model))
-      .catch(err => this.exception(res, err));
-  }
-
   createGag(req, res) {
-    console.info("create gag");
     var model = new Gag(req.body);
     console.info("model: ", model);
     model.active = true;

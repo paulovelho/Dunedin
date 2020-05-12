@@ -29,10 +29,6 @@ var sch = new Schema({
   date: {
     type: Date,
   },
-  created_at: {
-    type: Date,
-    required: true,
-  },
   used_in: {
     type: String,
   },
