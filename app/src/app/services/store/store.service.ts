@@ -1,67 +1,41 @@
 import { Injectable, Output, EventEmitter } from "@angular/core";
 
-import { User } from '@app/features/users/model';
-
 @Injectable()
 export class Store {
 
-  @Output() newLogin = new EventEmitter<User>();
+	@Output() newLogin = new EventEmitter<any>();
 
-  constructor(
-  ) {
-    this.init();
-  }
+	constructor(
+	) {
+		this.init();
+	}
 
-  private init(): void {
-    this.loadUserFromStorage();
-  }
+	private init(): void {
+	}
 
-  public setClient(client: string): void {
-    localStorage.setItem("client", client);
-  }
-  public getClient(): string {
-    return localStorage.getItem("client") || null;
-  }
+	public setToken(token: string): void {
+		localStorage.setItem("dunedin-token", token);
+	}
+	public getToken(): string {
+		return localStorage.getItem("dunedin-token") || null;
+	}
 
-  public setToken(token: string): void {
-    localStorage.setItem("token", token);
-  }
-  public getToken(): string {
-    return localStorage.getItem("token") || null;
-  }
+	public setExpiration(expire: number): void {
+		localStorage.setItem("expires", expire.toString());
+	}
+	public isExpired(): boolean {
+		var ts = Math. round((new Date()). getTime() / 1000);
+		let expires = localStorage.getItem("expires");
+		return (+expires <= ts);
+	}
 
-  /* USER STORE */
-  private user: User = null;
-  private loadUserFromStorage(): void {
-    let localUser = localStorage.getItem("user");
-    if(!localUser || localUser == "undefined") return null;
-    let data = JSON.parse(localUser);
-    if(!data) return null;
-    this.user = new User().from(data);
-  }
-  private saveUserInStorage(user: User): void {
-    localStorage.setItem("user", JSON.stringify(user));
-    this.newLogin.emit(user);
-  }
-  public setLoggedUser(user: User): void {
-    this.user = user;
-    this.saveUserInStorage(user);
-  }
-  public getLoggedUser(): User {
-    return this.user;
-  }
-  public isLogged(): boolean {
-    let user = this.getLoggedUser();
-    let token = this.getToken();
-    if(!user || !token) return false;
-    return(user.email != null);
-  }
+	public isLogged(): boolean {
+		let token = this.getToken();
+		return (token != null);
+	}
 
-  public clean(): void {
-    this.user = null;
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-  }
-
+	public clean(): void {
+		
+	}
 
 }

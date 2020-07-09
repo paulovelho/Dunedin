@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+	envName: "production",
+  production: true,
+	api: "https://api.botecaria.com.br/",
 };

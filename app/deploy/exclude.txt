@@ -1,0 +1,8 @@
+.git
+.gitignore
+.gitkeep
+deploy
+node_modules
+ansible.cfg
+bitbucket-pipelines.yml
+migrations

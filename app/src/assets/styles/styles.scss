@@ -1,0 +1,47 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+@import "variables";
+@import "mixins";
+@import "libs-override";
+@import "forms";
+
+
+/* PLATYPUS: */
+.right { text-align: right; }
+.center { text-align: center; }
+
+.toast-container {
+	margin-top: 60px;
+}
+
+i.action {
+	cursor: pointer;
+	color: $action-icon;
+	border: 1px solid $action-icon;
+	padding: 4px;
+	border-radius: 4px;
+	margin-right: 4px;
+	&:hover {
+		color: $action-hover;
+		border: 1px solid $action-hover;
+	}
+
+	&.action-danger {
+		color: $action-danger;
+		border: 1px solid $action-danger;
+		&:hover {
+			color: $action-danger-hover;
+			border: 1px solid $action-danger-hover;
+		}
+	}
+
+	&.action-dark {
+		color: $action-dark;
+		border: 1px solid $action-dark;
+		&:hover {
+			color: $action-dark-hover;
+			border: 1px solid $action-dark-hover;
+		}
+	}
+}
+

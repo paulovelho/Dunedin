@@ -3,6 +3,7 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, Htt
 import { Observable } from "rxjs";
 import { timeout } from 'rxjs/operators';
 
+import { AppConfig } from "@app/app.config";
 import { ApiManager } from './api-manager.service';
 import { Store } from '@services/store/store.service';
 
@@ -13,7 +14,8 @@ export class ApiInterceptor implements HttpInterceptor {
 
 	constructor(
 		private Manager: ApiManager,
-		private Store: Store
+		private Config: AppConfig,
+		private Store: Store,
 	){ }
 
 	private SetHeaders(req: HttpRequest<any>): HttpRequest<any> {
@@ -43,8 +45,16 @@ export class ApiInterceptor implements HttpInterceptor {
 		return Observable.throw(error);
 	}
 
+	private EligibleUrl(url: string): boolean {
+		let addTo: string = this.Config.get("api");
+		return url.startsWith(addTo);
+	}
+
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		let request = this.SetHeaders(req);
+		let request = req;
+		if(this.EligibleUrl(req.url)) {
+			request = this.SetHeaders(req);
+		}
 		return next.handle(request)
 			.pipe(timeout(this.timeout))
 			.map((ev) => this.GetResponse(ev))

@@ -53,7 +53,7 @@ export class ApiManager {
 	private ResponseManage(response: any): void {
 //    console.info("checking body ", response);
 		if(!response.success) {
-			return this.ErrorCodeManager(response.code, response.data)
+			return this.ErrorCodeManager(response.code, response);
 		}
 	}
 

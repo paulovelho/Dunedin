@@ -1,0 +1,44 @@
+---
+- hosts: staging
+  vars:
+    project_path: ~/beat/maori
+  tasks:
+    - name: set deploy variables
+      set_fact:
+        release_path: "{{ project_path }}/app/releases/{{ lookup('pipe','date +%Y%m%d%H%M%S') }}"
+        current_path: "{{ project_path }}/app/current"
+    - name: ensure main project folder exists
+      file:
+        dest: "{{ project_path }}/app"
+        state: directory
+    - name: create new release folder
+      file:
+        dest: "{{ release_path }}"
+        state: directory
+    - name: copy files of the new release
+      synchronize:
+        src: "{{ lookup('env', 'PWD') }}/"
+        dest: "{{ release_path }}"
+        delete: yes
+        recursive: yes
+        rsync_opts:
+          - "--no-motd"
+          - "--chmod=D2775,F664"          
+          - "--exclude-from={{ lookup('env', 'PWD') }}/deploy/exclude.txt"
+    - name: update symbolic link to the current release
+      file:
+        src: "{{ release_path }}"
+        dest: "{{ current_path }}"
+        state: link
+        force: true
+    - name: build angular application
+      command: "sh install-app.sh"
+      register: build_output
+      args:
+        chdir: "{{ project_path }}"
+    - debug:
+        msg: "{{ build_output.stdout }}"        
+    - name: initialize the docker container
+      command: "docker-compose up -d --force-recreate"
+      args:
+        chdir: "{{ project_path }}"

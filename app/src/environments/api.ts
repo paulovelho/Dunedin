@@ -2,6 +2,9 @@
 
 export const apiData = {
 
+	api_auth: "http://malte.localhost.com:3000",
+
+
 	login: "/login",
 
 	address: "/address/:id",

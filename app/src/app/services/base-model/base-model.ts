@@ -14,6 +14,7 @@ export class BaseModel {
   }
 
 	public from(obj) {
+		if(!obj) return this;
 		let props: Array<string> = Object.getOwnPropertyNames(obj);
 		props.forEach(i => this[i] = obj[i]);
 		if( obj._id ) {

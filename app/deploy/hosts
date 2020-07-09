@@ -1,0 +1,2 @@
+[staging]
+apteryx ansible_connection=ssh ansible_host=baterasbeat.net ansible_port=1022 ansible_user=wallaby

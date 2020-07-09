@@ -7,18 +7,21 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class ApiService {
 
+	private debugMode = true;
+
   constructor(
     private http: HttpClient
   ) {
   }
 
   private catchError = (error: any) => {
-    console.info(error);
+    console.error(error);
     return Observable.throw(error || "Server.error");
   }
 
   private debug(url, method, data) {
-//    console.info("requesting ["+url+"]("+method+") with options: ", data);
+  	if(!this.debugMode) return;
+    console.info("requesting [ "+url+" ]("+method+") with options: ", data);
   }
 
   private ContentType(type: string) {
@@ -49,7 +52,8 @@ export class ApiService {
 
   public deleteApi(url: string): Observable<any> {
     this.debug(url, "DELETE", null);
-    return this.http.delete(url, this.ContentType("application/json"));
+		console.info("calling delete on ", url);
+    return this.http.delete(url);
   }
 
   public fileApi(url: string): Observable<any> {

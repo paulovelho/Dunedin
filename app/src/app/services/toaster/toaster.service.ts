@@ -14,7 +14,7 @@ export class Toaster {
 	}
 
 	private debug(type, message): void {
-		console.trace(type + " toaster with message ["+message+"]");
+//		console.trace(type + " toaster with message ["+message+"]");
 	}
 
 	public error(message: string): void {
@@ -30,6 +30,9 @@ export class Toaster {
 	}
 	public warning(message: string): void {
 		this.openToast("warning", message, null);
+	}
+	public info(message: string): void {
+		this.openToast("info", message, null);
 	}
 
 	public openToast(type, message, title) {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import 'sass-to-js/js/src/sass-to-js.js';
+
+import { Store } from '@app/services/store/store.service';
 
 import { EnvironmentConfig, ClientData } from '../environments/interface';
 import { environment } from '../environments/environment';
@@ -17,6 +18,7 @@ export class AppConfig {
 	config:any;
 
 	constructor(
+    private Store: Store
 	){
     this.env = <EnvironmentConfig> environment;
     this.api = apiData;
@@ -26,9 +28,9 @@ export class AppConfig {
 
 	getMainConfig(): any {
 		return {
-			name: 'Malte',
-			title: 'Botecaria Distribuição e Marketing',
-			pageTitle: "Malte - Botecaria",
+			name: 'Dunedin',
+			title: 'Dunedin Gag Library',
+			pageTitle: "Duneding Gag Library",
 			version: '1.0.0',
 		};
 	}
@@ -38,21 +40,6 @@ export class AppConfig {
 	}
 	public get(key: string): any {
 	  return this.env[key];
-	}
-
-	private replaceUrlParams(url: string, key: string, value: string): string {
-		return url.replace(new RegExp(':' + key, 'g'), value );
-	}
-
-	public getApi(key: string, param?: any): string {
-		let endpoint = this.api[key];
-		if(param) {
-			for(let key in param) {
-				let v = param[key];
-				endpoint = this.replaceUrlParams(endpoint, key, v);
-			}
-		}
-		return this.get("api") + endpoint;
 	}
 
 	public load(): AppConfig {

@@ -16,6 +16,7 @@ export class ErrorHandler {
 	) {}
 
 	public ErrorCodeManager(code, data): void {
+		console.error("error-handler - managing error: " + code, data);
 		switch (code) {
 			case 0:
 				this.Toaster.error(data.message);
@@ -24,7 +25,6 @@ export class ErrorHandler {
 				this.Toaster.error("parâmetros de busca inválidos");
 				break;
 			case 4010: // token expired
-				console.error(data);
 				let expired = this.datePipe.transform(data.expiredAt, 'yyyy-MM-dd hh:mm:ss');
 				this.Toaster.warning("Login expirado em " + expired);
 				this.redirectToLogin();
@@ -33,28 +33,35 @@ export class ErrorHandler {
 				this.Toaster.error("usuário/senha inválidos!");
 				break;
 			case 2005: // invalid object
-				// take care of the error by itself
+				break;
+			case 2006: // invalid data
+				this.Toaster.error("chamada inválida!");
 				break;
 			case 5052:
 				this.Toaster.error("Ocorreu um erro na integração com a plataforma financeira: ["+ data.message +"]");
 				break;
 			default:
-				console.info(data);
-				this.Toaster.error("error");
+				let message = "unknown error";
+				if(data.message) message = data.message;
+				this.Toaster.error(message);
 				break;
 		}
 	}
 
 	private redirectToLogin(): void {
+		let currentRoute = this.router.url;
 		this.Store.clean();
-		this.router.navigate(["login"]);
+		this.router.navigate(["login"], { queryParams: { redirect: currentRoute } });
 	}
 
 	private getErrorMessage(item: any): string {
-		switch (item.error) {
+		console.error(item);
+		switch (item.kind) {
 			case "uniqueEmail":
 				return item.key + " já está cadastrado no sistema!";
 				break;
+			case "required":
+				return "campo obrigatório: " + item.path;
 			default:
 				return item.key + " behave unexpectedly";
 				break;
@@ -63,6 +70,9 @@ export class ErrorHandler {
 
 	public ValidationError(errors: Array<any>) {
 		if(!errors) return this.unknownError(errors);
+		if(!Array.isArray(errors)) {
+			errors = Object.keys(errors).map((index) => errors[index] );
+		}
 		let message: Array<string> = [];
 		errors.forEach((item) => {
 			message.push(this.getErrorMessage(item));
