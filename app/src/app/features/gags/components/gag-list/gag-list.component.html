@@ -1,0 +1,13 @@
+ <div class="row" *ngIf="gags?.length">
+	<div class="col-sm-12 right count">
+		{{ gags.length }} results:
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+
+		<gag-item *ngFor="let item of gags" [item]="item"></gag-item>
+
+	</div>
+</div>

@@ -22,6 +22,7 @@ import { ToastrModule } from 'ngx-toastr';
 // APIS
 import { BaseApi } from '@services/api/connect/api';
 import { AuthApi } from '@services/api/connect/auth';
+import { GagsApi } from '@services/api/connect/gags';
 
 
 // SERVICES
@@ -75,6 +76,7 @@ registerLocaleData(localePt, 'pt-BR');
 
 		BaseApi,
 		AuthApi,
+		GagsApi,
 
 		AppConfig,
 		ErrorHandler,

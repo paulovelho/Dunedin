@@ -1,0 +1,14 @@
+@import "variables";
+
+.container {
+	width: 80%;
+	margin: 20px auto;
+}
+
+.search {
+	border-bottom: 1px solid $gray;
+}
+
+.no-results {
+	padding: 100px;
+}

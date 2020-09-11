@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 @Injectable()
 export class NavigationService {
 
-	private pagesUrl: string = "app";
+	private pagesUrl: string = "";
 
 	constructor(
     private router: Router
 	) { }
 
 	private urls = {
-		home: "/",
+		home: "gags",
 	};
 	private replaceUrlParams(url: string, key: string, value: string): string {
 		return url.replace(new RegExp(':' + key, 'g'), value );
@@ -27,10 +27,13 @@ export class NavigationService {
 	public getUrl(destination: string, params?: any): string {
 		let url: string = this.urls[destination];
 		if(params) url = this.buildUrl(url, params);
+		console.info("returning " + url);
 		return url;
 	}
 	public navigateTo(destination: string, params?: any): void {
-		this.router.navigate([this.pagesUrl, ...this.getUrl(destination, params).split("/")]);
+		const navigation = [...this.getUrl(destination, params).split("/")];
+		console.info("navigation: ", navigation);
+		this.router.navigate(navigation);
 	}
 	public changeUrl(destination: string, params?: any): void {
     window.history.replaceState({}, '', this.pagesUrl + "/" + this.getUrl(destination, params));
@@ -40,7 +43,11 @@ export class NavigationService {
 		this.router.navigate(["login"]);
 	}
 	public goHome(): void {
+		console.info("going home");
 		this.navigateTo("home");
+	}
+	public searchAuthor(author: string): void {
+
 	}
 
 }

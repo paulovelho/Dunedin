@@ -18,6 +18,11 @@ export const routes: Routes = [
 		canActivate: [ AuthGuardService ],
 		loadChildren: () => import('@app/features/dashboard/module').then(m => m.DashboardModule),
 	},
+	{
+		path: 'gags',
+		canActivate: [ AuthGuardService ],
+		loadChildren: () => import('@app/features/gags/module').then(m => m.GagsModule),
+	},
 	{ 
 		path: 'login',
 		loadChildren: 
