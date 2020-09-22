@@ -12,6 +12,7 @@ export class NavigationService {
 
 	private urls = {
 		home: "gags",
+		search: "gags",
 	};
 	private replaceUrlParams(url: string, key: string, value: string): string {
 		return url.replace(new RegExp(':' + key, 'g'), value );
@@ -47,7 +48,9 @@ export class NavigationService {
 		this.navigateTo("home");
 	}
 	public searchAuthor(author: string): void {
-
+		const url = this.getUrl('search');
+		console.info("going to ", url);
+		this.router.navigate([	url], { queryParams: { author: author, q: 0 } });
 	}
 
 }

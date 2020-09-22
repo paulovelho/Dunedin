@@ -21,9 +21,19 @@ export class SearchBarComponent implements OnInit {
 
 	ngOnInit() {
 		this.route.queryParams.subscribe(params => {
-			if(params["q"]) this.query = params["q"];
-			if(params["author"]) this.author = params["author"];
-			if(params["run"]) this.filter();
+			let run = false;
+			if(params["q"]) {
+				this.query = params["q"];
+				if(this.query == '0') this.query = '';
+				else run = true;
+			}
+			if(params["author"]) {
+				this.author = params["author"];
+				if(this.author == '0') this.author = '';
+				else run = true;
+				run = true;
+			}
+			if(run) this.filter();
 		});
 	}
 
