@@ -1,5 +1,11 @@
 app/node_modules
-api/node_modules
-api/importer/docs
+api-node/node_modules
+api-node/importer/docs
+
 docker/database
 
+database
+
+api-php/api/plugins/
+api-php/logs/
+api-php/magrathea
