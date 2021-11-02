@@ -6,6 +6,6 @@ docker/database
 
 database
 
-api-php/api/plugins/
-api-php/logs/
+api-php/api/plugins
+api-php/logs/*
 api-php/magrathea
