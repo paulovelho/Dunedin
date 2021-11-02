@@ -72,7 +72,7 @@ services:
     restart: always
     environment:
       LETS_ENCRYPT_EMAIL: "dunedin@platypusweb.com.br"
-      LETS_ENCRYPT_DOMAINS: "dunegin-api.localhost.com,www.dunedin-api.localhost.com"
+      LETS_ENCRYPT_DOMAINS: "dunedin-api.localhost.com,www.dunedin-api.localhost.com"
 
   dunedin_phpmyadmin:
     image: phpmyadmin/phpmyadmin
