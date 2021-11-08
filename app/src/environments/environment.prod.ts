@@ -1,5 +1,5 @@
 export const environment = {
 	envName: "production",
   production: true,
-	api: "https://api.botecaria.com.br/",
+	api: "http://dunedin-api.paulovelho.com/",
 };

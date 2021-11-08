@@ -29,7 +29,7 @@ export class Gag extends BaseModel {
 	public getLocation() {
 		switch (this.origin) {
 			case "twitter":
-				return `<a href="${this.location}" target="_blank">${this.location}</a>`
+				return `<a href="https://twitter.com/${this.author}/status/${this.location}" target="_blank">${this.location}</a>`
 			default:
 				return this.location;
 		}

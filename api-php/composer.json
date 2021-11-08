@@ -1,0 +1,13 @@
+{
+    "name": "platypus/dunedin",
+    "authors": [
+        {
+            "name": "Platypus",
+            "email": "paulovelho@platypusweb.com.br"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "firebase/php-jwt": "@dev"
+    }
+}
