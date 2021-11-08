@@ -11,7 +11,7 @@ class GagImporterControl extends GagControlBase {
 		return preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $content);
 	}
 
-	private function parseGag($content) {
+	private function parseKindleGag($content) {
 		$data = preg_split('/\r\n|\r|\n/', $content);
 
 		if (empty($data[0])) {
@@ -28,22 +28,19 @@ class GagImporterControl extends GagControlBase {
 		$date = new DateTime($loc[1]);
 		$gag->location = $location;
 		$gag->date = $date->format('Y-m-d H:i:s');
-		$gag->CreateHash();
 
+		$gag->CreateHash();
 		$gag = $gag->Insert();
 
 		return $gag;
 	}
-
 	private function parseKindleFile($file) {
 		$txtContent = file_get_contents($file);
 		$highlights = explode('==========', $txtContent);
 
 		$parsed = [];
-
 		foreach ($highlights as $gagContent) {
-//			array_push($parsed, $gagContent);
-			array_push($parsed, $this->parseGag($gagContent));
+			array_push($parsed, $this->parseKindleGag($gagContent));
 		}
 		return $parsed;
 	}
@@ -59,6 +56,46 @@ class GagImporterControl extends GagControlBase {
 
 		return $parse;
 	}
+
+
+
+	private function parseTwitterGag($tweet) {
+		$gag = new Gag();
+		$gag->location = $tweet->id;
+		$gag->origin = "twitter";
+		$date = new DateTime($tweet->created_at);
+		$gag->date = $date->format('Y-m-d H:i:s');
+
+		$text = $tweet->full_text;
+		if ( substr( $text, 0, 4 ) === "RT @" ) {
+			$textData = explode(':', $text, 2);
+			$authorData = explode('@', $textData[0]);
+			$gag->author = $authorData[1];
+			$gag->content = $textData[1];
+		} else {
+			$gag->author = "@paulovelho";
+			$gag->content = $text;
+		}
+
+		$gag->CreateHash()->ClearEmojis();
+		$gag = $gag->Insert();
+
+		return $gag;
+	}
+
+
+	public function ImportTwitter() {
+		$twitterFile = realpath($GLOBALS['site_path']."/data/twitter.js");
+		$twitterContent = file_get_contents($twitterFile);
+		$twitterData = json_decode($twitterContent);
+
+		$parsed = [];
+		foreach ($twitterData as $tweet) {
+			array_push($parsed, $this->parseTwitterGag($tweet));
+		}
+		return $parsed;
+	}
+
 
 }
 

@@ -22,6 +22,7 @@ export class AuthService {
 					resolve(false);
 				}
 				let data = result.data;
+				console.info('got data: ', data);
 				this.Store.setToken(data.token);
 				this.Store.setExpiration(data.expires);
 				resolve(true);

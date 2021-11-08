@@ -4,8 +4,17 @@ include(__DIR__."/Base/GagBase.php");
 
 class Gag extends GagBase {
 
+	public function ClearEmojis() {
+		$this->content = GagControl::removeEmoji($this->content);
+		return $this;
+	}
+
 	public function CreateHash() {
-		$this->hash = md5($this->author."-".$this->location);
+		if ($this->origin == "twitter") {
+			$this->hash = "tweet-".$this->location;
+		} else {
+			$this->hash = md5($this->author."-".$this->location);
+		}
 		return $this;
 	}
 
@@ -15,7 +24,12 @@ class Gag extends GagBase {
 
 		if(is_null($this->content)) return $this;
 
-		parent::Insert();
+		try {
+			parent::Insert();
+		} catch(Exception $ex) {
+			throw new Exception("Error adding Gag ".$this->location. " ". $ex->GetMessage(), 1);
+			
+		}
 		return $this;
 	}
 
@@ -45,6 +59,14 @@ class GagControl extends GagControlBase {
 		}
 
 		return $this->Run($query);
+	}
+
+
+
+	public static function removeEmoji($text) {
+		$text = iconv('UTF-8', 'ISO-8859-15//IGNORE', $text);
+		$text = preg_replace('/\s+/', ' ', $text);
+		return iconv('ISO-8859-15', 'UTF-8', $text);
 	}
 
 }

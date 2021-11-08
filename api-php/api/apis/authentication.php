@@ -89,7 +89,8 @@ class AuthenticationApi extends MagratheaApiControl {
 		return [
 			"refresh_token" => $jwtRefresh,
 			"token" => $jwt,
-			"user" => $user
+			"user" => $user,
+			"expires" => $expire
 		];
 	}
 

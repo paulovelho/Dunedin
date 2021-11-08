@@ -17,12 +17,15 @@ class GagsApi extends MagratheaApiControl {
 		if($type != "kindle" && $type != "twitter")
 			throw new Exception("invalid type: [".$type."]", 500);
 		
-		$file = $_GET['file'];
-		if(is_null($file)) throw new Exception("empty file", 500);
 
 		$importer = new GagImporterControl();
 
-		$rs = $importer->ImportKindle($file);
+		if ($type == "kindle") {
+			$file = $_GET['file'];
+			if(is_null($file)) throw new Exception("empty file", 500);
+			$rs = $importer->ImportKindle($file);
+		}
+		if ($type == "twitter") $rs = $importer->ImportTwitter();
 		return $rs;
 	}
 
