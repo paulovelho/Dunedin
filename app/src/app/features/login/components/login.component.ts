@@ -19,7 +19,8 @@ import { AppConfig } from '@app/app.config';
 })
 export class LoginComponent implements OnInit {
 	public form:FormGroup;
-	public clientTitle:string;
+	public clientTitle: string;
+	public version: string;
 
 	private homeRedirect: string = "/app";
 
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit {
 		this.checkLogged();
 		this.clientTitle = this.appConfig
 				.getTitle();
+		this.version = this.appConfig.get('version');
 	}
 
 	private buildForm() {
