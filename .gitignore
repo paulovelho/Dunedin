@@ -10,3 +10,5 @@ api-php/api/plugins
 api-php/data/*
 api-php/logs/*
 api-php/magrathea
+
+.DS_Store
